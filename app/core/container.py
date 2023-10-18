@@ -2,6 +2,7 @@ from dependency_injector import containers, providers
 
 from .config import configs
 from .database import Database
+from .redis import Redis
 
 
 
@@ -13,3 +14,4 @@ class Container(containers.DeclarativeContainer):
 	)
 
 	database = providers.Singleton(Database, db_url=configs.DATABASE_URI)
+	redis = providers.Singleton(Redis, configs.redis_configs)

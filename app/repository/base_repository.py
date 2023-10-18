@@ -14,12 +14,11 @@ class BaseRepository:
 		self._session = _session
 
 
-	def _get_by_id(self, id):
-		with self._session as session:
-			obj = session.query(self._model).filter_by(id=id).first()
-			if obj:
-				return obj, session
-			raise NotFoundError(detail=f'Not found with id = {id}')
+	def _get_by_id(self, id, session):
+		obj = session.query(self._model).filter_by(id=id).first()
+		if obj:
+			return obj
+		raise NotFoundError(detail=f'Not found with id = {id}')
 
 
 	def _create(self, schema:dict):
@@ -34,14 +33,16 @@ class BaseRepository:
 	
 
 	def _update(self, id:int, schema:dict):
-		obj, session = self._get_by_id(id)
-		obj.update(schema.dict(exclude_none=True))
-		session.commit()
+		with self._session as session:
+			obj = self._get_by_id(id, session)
+			obj.update(schema.dict(exclude_none=True))
+			session.commit()
 
-		return self._get_by_id(id)[0]
+		return self._get_by_id(id, session)
 
 
 	def _delete(self, id):
-		obj, session = self._get_by_id(id)
-		session.delete(obj)
-		session.commit()
+		with self._session as session:
+			obj = self._get_by_id(id, session)
+			session.delete(obj)
+			session.commit()

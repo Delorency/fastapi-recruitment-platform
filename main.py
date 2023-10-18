@@ -21,7 +21,9 @@ class AppCreator:
 
 		# Database
 		self.database = self.container.database()
-		# self.database.create_database()
+
+		# Redis
+		self.redis = self.container.redis()
 
 		# Middleware
 		if configs.BACKEND_CORS_ORIGINS:
@@ -39,4 +41,5 @@ class AppCreator:
 app_creator = AppCreator()
 app = app_creator.app
 database = app_creator.database
+redis = app_creator.redis
 container = app_creator.container

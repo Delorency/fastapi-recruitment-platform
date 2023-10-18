@@ -19,10 +19,6 @@ class Database:
 		self._session = scoped_session(self._session_factory)
 
 
-	def create_database(self) -> None:
-		SQLModel.metadata.create_all(self._engine)
-
-
 	@contextmanager
 	def session(self) -> Callable[..., AbstractContextManager[Session]]:
 		session: Session = self._session()
