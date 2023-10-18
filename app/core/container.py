@@ -14,4 +14,4 @@ class Container(containers.DeclarativeContainer):
 	)
 
 	database = providers.Singleton(Database, db_url=configs.DATABASE_URI)
-	redis = providers.Singleton(Redis, configs.redis_configs)
+	redis = providers.Singleton(Redis, **configs.redis_configs)

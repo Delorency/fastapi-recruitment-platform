@@ -52,11 +52,11 @@ class Configs(BaseSettings):
 
 	# Redis
 	redis_configs:dict[str, str] = {
-		REDIS_HOST: os.getenv('REDIS_HOST'),
-		REDIS_PORT: os.getenv('REDIS_PORT'),
-		REDIS_DB: os.getenv('REDIS_DB'),
-		REDIS_USER: os.getenv('REDIS_USER'),
-		REDIS_PASS: os.getenv('REDIS_PASS')
+		'REDIS_HOST': os.getenv('REDIS_HOST'),
+		'REDIS_PORT': os.getenv('REDIS_PORT'),
+		'REDIS_DB': os.getenv('REDIS_DB'),
+		'REDIS_USER': os.getenv('REDIS_USER'),
+		'REDIS_PASS': os.getenv('REDIS_PASS')
 	}
 
 
