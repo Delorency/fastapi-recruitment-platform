@@ -4,6 +4,7 @@ from starlette.middleware.cors import CORSMiddleware
 from app.core.config import configs
 
 from app.core.container import Container
+from app.main import container_ini
 
 
 
@@ -15,15 +16,6 @@ class AppCreator:
 			openapi_url=f"{configs.API}/openapi.json",
 			version="0.0.1",
 		)
-
-		# Container
-		self.container = Container()
-
-		# Database
-		self.database = self.container.database()
-
-		# Redis
-		self.redis = self.container.redis()
 
 		# Middleware
 		if configs.BACKEND_CORS_ORIGINS:
@@ -38,8 +30,6 @@ class AppCreator:
 		# Add routes
 
 
+
 app_creator = AppCreator()
 app = app_creator.app
-database = app_creator.database
-redis = app_creator.redis
-container = app_creator.container
