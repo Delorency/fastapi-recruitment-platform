@@ -1,3 +1,5 @@
+import uvicorn
+
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
@@ -33,3 +35,7 @@ class AppCreator:
 
 app_creator = AppCreator()
 app = app_creator.app
+
+
+if __name__ == '__main__':
+	uvicorn.run("start:app", host="0.0.0.0", log_level="info")
