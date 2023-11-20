@@ -34,6 +34,7 @@ class Configs(BaseSettings):
 
 	# Database
 	DB:str = os.getenv('DB')
+	print(DB)
 	DB_ENGINE:str = DB_ENGINE_DICT.get(DB)
 	DB_HOST:str = os.getenv('DB_HOST')
 	DB_PORT:str = os.getenv('DB_PORT')
