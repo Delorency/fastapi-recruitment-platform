@@ -4,11 +4,13 @@ import redis
 
 
 class Redis:
-	def __init__(self, **kwargs:dict[str,str]) -> None:
+	def __init__(self, REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_USER, REDIS_PASS) -> None:
 		self.redis_engine = redis.Redis(
-			host=kwargs.get('REDIS_HOST'), 
-			port=kwargs.get('REDIS_PORT'), 
-			db=kwargs.get('REDIS_DB'), 
-			username=kwargs.get('REDIS_USER'), 
-			password=kwargs.get('REDIS_PASS')
+			host='localhost',
+			port='6379',
+			db=1,
+			username='delorency',
+			password='delorency',
+			charset="utf-8",
+			decode_responses=True
 		)
