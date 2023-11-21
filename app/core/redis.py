@@ -2,7 +2,6 @@ import redis
 
 
 
-
 class Redis:
 	def __init__(self, REDIS_HOST, REDIS_PORT, REDIS_DB, REDIS_USER, REDIS_PASS) -> None:
 		self.redis_engine = redis.Redis(

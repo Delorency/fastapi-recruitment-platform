@@ -4,6 +4,8 @@ from starlette.middleware.cors import CORSMiddleware
 from app.core.container import Container
 from app.core.config import configs
 
+from app.api.v1.subapp import subapp as api_v1
+
 
 
 class ContainerIni:
@@ -13,7 +15,7 @@ class ContainerIni:
 		# App
 		self.app = FastAPI(
 			title=configs.PROJECT_NAME,
-			openapi_url=f"{configs.API}/openapi.json",
+			openapi_url=f'{configs.API}/openapi.json',
 			version="0.0.1",
 		)
 
@@ -36,7 +38,8 @@ class ContainerIni:
 		# Redis
 		self.redis = self.container.redis()
 
-		# Add routes
+		# Mount apps
+		self.app.mount(configs.API_V1_PREFIX, api_v1)
 
 
 

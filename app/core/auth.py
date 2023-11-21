@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-
 def create_jwt_token(subject: dict, expire_in: timedelta, token_type: str) -> (str, str, str):
 	expire_time = datetime.utcnow() + timedelta(seconds=expire_in)
 	payload = {**subject, 'exp': expire_time}
