@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
+from sqladmin import Admin
+
 from app.core.container import Container
 from app.core.config import configs
 
@@ -8,7 +10,7 @@ from app.api.v1.subapp import subapp as api_v1
 
 
 
-class ContainerIni:
+class AppIniContainer:
 
 	def __init__(self):
 
@@ -38,14 +40,18 @@ class ContainerIni:
 		# Redis
 		self.redis = self.container.redis()
 
-		# Mount apps
+		# Mount subapps
 		self.app.mount(configs.API_V1_PREFIX, api_v1)
 
+		# Admin
+		self.admin = Admin(self.app, self.database._engine)
 
 
-container_ini = ContainerIni()
+
+container_ini = AppIniContainer()
 
 app = container_ini.app
 database = container_ini.database
 redis = container_ini.redis
 container = container_ini.container
+admin = container_ini.admin

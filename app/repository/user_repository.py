@@ -3,7 +3,7 @@ from typing import Callable
 
 from sqlalchemy.orm import Session
 
-from app.model.user import User
+from app.model.user_model import User
 from app.repository.base_repository import BaseRepository
 
 

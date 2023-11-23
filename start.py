@@ -1,4 +1,7 @@
 import uvicorn
+
+import app.admin
+
  
 
 if __name__ == '__main__':
