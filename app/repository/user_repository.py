@@ -9,6 +9,5 @@ from app.repository.base_repository import BaseRepository
 
 
 class UserRepository(BaseRepository):
-    def __init__(self, session_factory: Callable[..., AbstractContextManager[Session]]):
-        self.session = _session
-        super().__init__(_session, User)
+    def __init__(self, session: Callable[..., AbstractContextManager[Session]]):
+        super().__init__(session, User)

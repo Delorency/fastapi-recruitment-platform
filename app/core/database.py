@@ -16,12 +16,12 @@ class Database:
 			autocommit=False,
 			autoflush=False
 		)
-		self._session = scoped_session(self._session_factory)
+		self._scoped_session = scoped_session(self._session_factory)
 
 
 	@contextmanager
 	def session(self) -> Callable[..., AbstractContextManager[Session]]:
-		session: Session = self._session()
+		session: Session = self._scoped_session()
 		try:
 			yield session
 		except Exception:

@@ -9,9 +9,9 @@ from app.core.exception import DuplicatedError
 
 
 class BaseRepository:
-	def __init__(self, model, _session: AbstractContextManager[..., Session]) -> None:
+	def __init__(self, model, session: Callable[...,AbstractContextManager[Session]]) -> None:
 		self._model = model
-		self._session = _session
+		self._session = session
 
 
 	def _get_by_id(self, id, session):
@@ -22,7 +22,7 @@ class BaseRepository:
 
 
 	def _create(self, schema:dict):
-		with self._session as session:
+		with self._session() as session:
 			query = self._model.query(**schema.dict())
 			try:
 				session.add(query)
@@ -33,7 +33,7 @@ class BaseRepository:
 	
 
 	def _update(self, id:int, schema:dict):
-		with self._session as session:
+		with self._session() as session:
 			obj = self._get_by_id(id, session)
 			obj.update(schema.dict(exclude_none=True))
 			session.commit()
@@ -42,7 +42,7 @@ class BaseRepository:
 
 
 	def _delete(self, id):
-		with self._session as session:
+		with self._session() as session:
 			obj = self._get_by_id(id, session)
 			session.delete(obj)
 			session.commit()
