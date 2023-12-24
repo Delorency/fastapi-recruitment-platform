@@ -1,10 +1,8 @@
 from fastapi import FastAPI
 
-from .routes import routers
-
-from app.core.config import configs
+from app.api.v1.endpoints.auth import router as auth_router
 
 
 
 subapp = FastAPI()
-subapp.include_router(routers)
+subapp.include_router(auth_router)

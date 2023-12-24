@@ -4,6 +4,9 @@ from .config import configs
 from .database import Database
 from .redis import Redis
 
+from app.repository import *
+from app.service import *
+
 
 
 class Container(containers.DeclarativeContainer):
@@ -13,5 +16,12 @@ class Container(containers.DeclarativeContainer):
 		]
 	)
 
+	# Databases
 	database = providers.Singleton(Database, db_url=configs.DATABASE_URI)
 	redis = providers.Singleton(Redis, **configs.redis_configs)
+
+	# Repositories
+	user_repository = providers.Factory(UserRepository, session=database.provided.session)
+
+	# Services
+	auth_service = providers.Factory(AuthService, repository=user_repository)

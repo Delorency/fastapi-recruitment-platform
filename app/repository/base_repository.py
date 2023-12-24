@@ -1,10 +1,10 @@
 from typing import Callable
-from contexlib import AbstractContextManager
+from contextlib import AbstractContextManager
 
 from sqlalchemy.orm import Session
-from sqlalchemy.ext import IntegrityError
+from sqlalchemy.exc import IntegrityError
 
-from app.core.exception import DuplicatedError
+from app.core.exceptions import DuplicatedError
 
 
 
