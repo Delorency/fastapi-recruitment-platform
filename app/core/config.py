@@ -27,7 +27,7 @@ class Configs(BaseSettings):
 	SECRET_KEY:str = os.getenv('SECRET_KEY', '')
 	ACCESS_TOKEN_EXPIRE_SECONDS:int = 60 * 60 * 24 * 2
 	REFRESH_TOKEN_EXPIRE_SECONDS:int = 60 * 60 * 24 * 30
-	ALGORITHMS:str = 'HS256'
+	ALGORITHM:str = 'HS256'
 
 	# CORS
 	BACKEND_CORS_ORIGINS:list[str] = ["*"]

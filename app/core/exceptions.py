@@ -17,3 +17,8 @@ class NotFoundError(HTTPException):
 class AuthError(HTTPException):
 	def __init__(self, detail: Any = None, headers: Optional[Dict[str, Any]] = None) -> None:
 		super().__init__(status.HTTP_403_FORBIDDEN, detail, headers)
+
+
+class UnauthorizedError(HTTPException):
+	def __init__(self, detail: Any = None, headers: Optional[Dict[str, Any]] = None) -> None:
+		super().__init__(status.HTTP_401_UNAUHORIZED, detail, headers)

@@ -21,12 +21,13 @@ class BaseRepository:
 		raise NotFoundError(detail=f'Not found with id = {id}')
 
 
-	def _create(self, schema:dict):
+	def _create(self, schema):
 		with self._session() as session:
-			query = self._model.query(**schema.dict())
+			query = self._model(**schema.dict())
 			try:
 				session.add(query)
 				session.commit()
+				session.refresh()
 			except IntegrityError as e:
 				raise DuplicatedError(detail=str(e.orig))
 			return query

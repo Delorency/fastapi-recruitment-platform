@@ -37,6 +37,8 @@ watchfiles = "==0.20.0"
 websockets = "==11.0.3"
 uvicorn = {extras = ["standart"], version = "*"}
 sqladmin = "*"
+passlib = "*"
+pyjwt = "*"
 
 [dev-packages]
 
