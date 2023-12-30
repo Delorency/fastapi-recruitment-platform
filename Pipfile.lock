@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "6e79839b368b870c43d99d3a145d743f6dd5e2d3514d5bcd0b716a3da5fd0830"
+            "sha256": "e2a25f7651c31dc81809a3d1e396746cfa171cecb0ad68c8fa064542c71ff754"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -775,14 +775,22 @@
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'",
             "version": "==1.4.41"
         },
-        "sqlalchemy2-stubs": {
+        "sqlalchemy-utils": {
             "hashes": [
-                "sha256:593784ff9fc0dc2ded1895e3322591689db3be06f3ca006e3ef47640baf2d38a",
-                "sha256:bd5d530697d7e8c8504c7fe792ef334538392a5fb7aa7e4f670bfacdd668a19d"
+                "sha256:6c96b0768ea3f15c0dc56b363d386138c562752b84f647fb8d31a2223aaab801",
+                "sha256:a2181bff01eeb84479e38571d2c0718eb52042f9afd8c194d0d02877e84b7d74"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.6'",
-            "version": "==0.0.2a35"
+            "version": "==0.41.1"
+        },
+        "sqlalchemy2-stubs": {
+            "hashes": [
+                "sha256:43067e3f67bd16a7fb2b574ee696f7ed53bf60f3e73329cf234a7b4dd4d3816a",
+                "sha256:619bd131f8ad7eeb88af8dfabb0e6ba07593db91868cdc49674d2cd4ca61e986"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==0.0.2a37"
         },
         "sqlmodel": {
             "hashes": [

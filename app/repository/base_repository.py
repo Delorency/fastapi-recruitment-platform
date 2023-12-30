@@ -27,7 +27,7 @@ class BaseRepository:
 			try:
 				session.add(query)
 				session.commit()
-				session.refresh()
+				session.refresh(query)
 			except IntegrityError as e:
 				raise DuplicatedError(detail=str(e.orig))
 			return query

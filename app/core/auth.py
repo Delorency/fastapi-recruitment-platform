@@ -14,7 +14,7 @@ pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
 
 def create_jwt_token(subject: dict, expire_in: timedelta, token_type: str) -> (str, str, str):
-	expire_time = datetime.utcnow() + timedelta(seconds=expire_in)
+	expire_time = (datetime.utcnow() + timedelta(seconds=expire_in)).timestamp()
 
 	payload = {**subject, 'exp': expire_time, 'type':token_type}
 	encode = jwt.encode(payload, configs.SECRET_KEY, algorithm=configs.ALGORITHM)
@@ -49,17 +49,18 @@ class JWTBearer(HTTPBearer):
 
 			if not credentials.scheme == 'Bearer':
 				raise AuthError('Schema not resolved') 
-			elif not self.verify_jwt(credentials.credentials):
+
+			token = decode_token(credentials.credentials)
+			
+			if not self.verify_jwt(token):
 				raise AuthError('Invalid token or token has expired')
 
 		else:
 			raise AuthError('Invalid authorization code')
 
 
-	def verify_jwt(self, token:str):
+	def verify_jwt(self, token:dict):
 		is_valid_token: bool = True
-
-		token = decode_token(token)
 
 		if not token.get('type', '') == 'access':
 			is_valid_token = False
