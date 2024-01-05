@@ -16,17 +16,17 @@ pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 def create_jwt_token(subject: dict, expire_in: timedelta, token_type: str) -> (str, str, str):
 	expire_time = (datetime.utcnow() + timedelta(seconds=expire_in)).timestamp()
 
-	payload = {**subject, 'exp': expire_time, 'type':token_type}
+	payload = {body: subject, 'exp': expire_time, 'type':token_type}
 	encode = jwt.encode(payload, configs.SECRET_KEY, algorithm=configs.ALGORITHM)
 
-	return encode, expire.strftime(configs.DATETIME_FORMAT), token_type
+	return encode, expire, token_type
 
 
 def decode_token(token: str) -> str:
 	try:
 		return jwt.decode(token, configs.SECRET_KEY, algorithms=[configs.ALGORITHM])
 	except Exception as e:
-		return {}
+		raise AuthError('Invalid token')
 
 
 def get_password_hash(password: str) -> str:

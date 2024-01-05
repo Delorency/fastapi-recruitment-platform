@@ -14,11 +14,14 @@ class BaseRepository:
 		self._session = session
 
 
-	def _get_by_id(self, id, session):
-		obj = session.query(self._model).filter_by(id=id).first()
-		if obj:
+	def _get_by_id(self, id):
+		with self._session as session:
+			obj = session.query(self._model).filter(self._model.id == id).first()
+
+			if not obj:
+				raise NotFoundError(detail=f'{self._model.__name__}: Not found with id = {id}')
+
 			return obj
-		raise NotFoundError(detail=f'Not found with id = {id}')
 
 
 	def _create(self, schema):
@@ -33,17 +36,28 @@ class BaseRepository:
 			return query
 	
 
-	def _update(self, id:int, schema:dict):
+	def _update_patch(self, id:int, schema):
 		with self._session() as session:
-			obj = self._get_by_id(id, session)
-			obj.update(schema.dict(exclude_none=True))
+			session.query(self.model).filter(self._model.id == id).update(schema.dict(exclude_none=True))
 			session.commit()
 
-		return self._get_by_id(id, session)
+		return self._get_by_id(id)
+
+
+	def _update_put(self, id:int, schema):
+		with self._session() as session:
+			session.query(self.model).filter(self._model.id == id).update(schema.dict())
+			session.commit()
+
+		return self._get_by_id(id)
 
 
 	def _delete(self, id):
 		with self._session() as session:
-			obj = self._get_by_id(id, session)
+			obj = session.query(self._model).filter(self._model.id == id)
+
+			if not obj:
+				raise NotFoundError(detail=f'{self._model.__name__}: Not found with id = {id}')
+
 			session.delete(obj)
 			session.commit()

@@ -1,6 +1,6 @@
-from app.repository.user_repository import UserRepository
+from pydantic import BaseModel
 
-from app.schema.auth_schema import SingUp
+from app.repository.user_repository import UserRepository
 
 from .base_service import BaseService
 
@@ -11,8 +11,8 @@ class AuthService(BaseService):
 	def __init__(self, repository: UserRepository):
 		super().__init__(repository)
 
-	def singup(self, schema: SingUp):
-		user = self._repo._create(schema)
+	def singup(self, schema: BaseModel):
+		user = self.create(schema)
 		delattr(user, 'password')
 		return user
 
