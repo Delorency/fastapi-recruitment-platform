@@ -1,6 +1,6 @@
 from sqlalchemy_utils import EncryptedType
 from sqlalchemy_utils.types.encrypted.encrypted_type import AesEngine
-from sqlmodel import SQLModel, Column, DateTime, Integer, String, Field, func
+from sqlmodel import Column, String, Field
 
 from app.core.config import configs
 

@@ -9,8 +9,8 @@ from sqlmodel import SQLModel
 
 
 class Database:
-	def __init__(self, db_url: str) -> None:
-		self._engine = create_engine(db_url, echo=True)
+	def __init__(self, db_uri: str) -> None:
+		self._engine = create_engine(db_uri, echo=True)
 		self._session_factory = sessionmaker(
 			bind=self._engine,
 			autocommit=False,

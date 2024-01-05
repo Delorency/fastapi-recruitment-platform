@@ -18,12 +18,13 @@ class Container(containers.DeclarativeContainer):
 	)
 
 	# Databases
-	database = providers.Singleton(Database, db_url=configs.DATABASE_URI)
+	database = providers.Singleton(Database, db_uri=configs.DATABASE_URI)
 	redis = providers.Singleton(Redis, **configs.redis_configs)
 
 	# Repositories
 	user_repository = providers.Factory(UserRepository, session=database.provided.session)
+	auth_repository = providers.Factory(AuthRepository, session=database.provided.session)
 
 	# Services
-	auth_service = providers.Factory(AuthService, repository=user_repository)
 	user_service = providers.Factory(UserService, repository=user_repository)
+	auth_service = providers.Factory(AuthService, repository=auth_repository)

@@ -12,8 +12,10 @@ from .auth import create_jwt_token, decode_token, JWTBearer
 
 
 @inject
-def get_current_user(token:str = Depends(JWTBearer()), 
-	service = Depends(Provide(Container.user_service))) -> User:
+def get_current_user(
+	token:str = Depends(JWTBearer()), 
+	service = Depends(Provide(Container.user_service))
+	) -> User:
 	try:
 		token_decode = TokenBody(**decode_token(token))
 		payload = Payload(**token_decode.body)

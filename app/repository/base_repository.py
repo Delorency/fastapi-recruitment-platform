@@ -19,23 +19,7 @@ class BaseRepository:
 			obj = session.query(self._model).filter(self._model.id==id).first()
 
 			if not obj:
-				raise NotFoundError(detail=f'{self._model.__name__}: Not found with id = {id}')
-
-			return obj
-
-
-	def _get_by_credentials(self, schema):
-		with self._session() as session:
-			email, username, password = tuple(schema.dict().values())
-			if email:
-				obj = session.query(self._model).filter(self._model.email==email, self._model.password==password).first()
-			elif username:
-				obj = session.query(self._model).filter(self._model.username==username, self._model.password==password).first()
-			else:
-				raise BadRequestError('Email field and username field is empty')
-
-			if not obj:
-				raise NotFoundError(detail=f'{self._model.__name__}: Invalid email or username or password')
+				raise NotFoundError(f'{self._model.__name__}: Not found with id = {id}')
 
 			return obj
 
@@ -73,7 +57,7 @@ class BaseRepository:
 			obj = session.query(self._model).filter(self._model.id==id)
 
 			if not obj:
-				raise NotFoundError(detail=f'{self._model.__name__}: Not found with id = {id}')
+				raise NotFoundError(f'{self._model.__name__}: Not found with id = {id}')
 
 			session.delete(obj)
 			session.commit()

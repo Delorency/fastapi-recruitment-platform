@@ -24,3 +24,14 @@ class AccessResponse(BaseModel):
 	refresh_token: str
 	exp: float
 	user_info: User
+
+
+class RefreshRequest(BaseModel):
+	refresh_token: str
+	password:str
+
+
+class RefreshResponse(BaseModel):
+	access_token: str
+	exp: float
+	user_info: User

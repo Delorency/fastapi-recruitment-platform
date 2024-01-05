@@ -14,3 +14,8 @@ class Payload(BaseModel):
 	id: int
 	is_active:bool
 	is_superuser:bool
+
+
+class TokenRefreshHandler(BaseModel):
+	id:int
+	password:str

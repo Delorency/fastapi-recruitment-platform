@@ -12,9 +12,6 @@ class BaseService:
 	def get_obj(self, id):
 		return self._repo._get_by_id(id)
 
-	def get_obj_by_credentials(self, schema):
-		return self._repo._get_by_credentials(schema)
-
 	def create(self, schema):
 		return self._repo._create(schema)
 
