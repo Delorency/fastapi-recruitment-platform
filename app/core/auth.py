@@ -13,13 +13,13 @@ from app.core.exceptions import AuthError, UnauthorizedError
 pwd_context = CryptContext(schemes=["sha256_crypt"], deprecated="auto")
 
 
-def create_jwt_token(subject: dict, expire_in: timedelta, token_type: str) -> (str, str, str):
+def create_jwt_token(subject: dict, expire_in: timedelta, token_type: str) -> (str, str):
 	expire_time = (datetime.utcnow() + timedelta(seconds=expire_in)).timestamp()
 
-	payload = {body: subject, 'exp': expire_time, 'type':token_type}
+	payload = {'body': subject, 'exp': expire_time, 'type':token_type}
 	encode = jwt.encode(payload, configs.SECRET_KEY, algorithm=configs.ALGORITHM)
 
-	return encode, expire, token_type
+	return encode, expire_time
 
 
 def decode_token(token: str) -> str:

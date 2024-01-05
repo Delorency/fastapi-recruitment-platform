@@ -1,10 +1,13 @@
 from fastapi import Depends
 from dependency_injector.wiring import Provide, inject
 
-from .auth import JWTBearer, decode_token
+from app.core.container import Container
 
-from app.schema.user_schema import User
-from app.schema.auth_schema import TokenBody, Payload
+from app.model.user_model import User
+
+from app.schema.token_schema import TokenBody, Payload
+
+from .auth import create_jwt_token, decode_token, JWTBearer
 
 
 

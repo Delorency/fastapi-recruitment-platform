@@ -13,6 +13,7 @@ class Container(containers.DeclarativeContainer):
 	wiring_config = containers.WiringConfiguration(
 		modules=[
 			'app.api.v1.endpoints.auth',
+			'app.core.utils'
 		]
 	)
 
@@ -25,3 +26,4 @@ class Container(containers.DeclarativeContainer):
 
 	# Services
 	auth_service = providers.Factory(AuthService, repository=user_repository)
+	user_service = providers.Factory(UserService, repository=user_repository)

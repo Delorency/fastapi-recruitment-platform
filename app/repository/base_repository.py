@@ -4,7 +4,7 @@ from contextlib import AbstractContextManager
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from app.core.exceptions import DuplicatedError
+from app.core.exceptions import NotFoundError, BadRequestError
 
 
 
@@ -14,12 +14,28 @@ class BaseRepository:
 		self._session = session
 
 
-	def _get_by_id(self, id):
-		with self._session as session:
-			obj = session.query(self._model).filter(self._model.id == id).first()
+	def _get_by_id(self, id:int):
+		with self._session() as session:
+			obj = session.query(self._model).filter(self._model.id==id).first()
 
 			if not obj:
 				raise NotFoundError(detail=f'{self._model.__name__}: Not found with id = {id}')
+
+			return obj
+
+
+	def _get_by_credentials(self, schema):
+		with self._session() as session:
+			email, username, password = tuple(schema.dict().values())
+			if email:
+				obj = session.query(self._model).filter(self._model.email==email, self._model.password==password).first()
+			elif username:
+				obj = session.query(self._model).filter(self._model.username==username, self._model.password==password).first()
+			else:
+				raise BadRequestError('Email field and username field is empty')
+
+			if not obj:
+				raise NotFoundError(detail=f'{self._model.__name__}: Invalid email or username or password')
 
 			return obj
 
@@ -38,7 +54,7 @@ class BaseRepository:
 
 	def _update_patch(self, id:int, schema):
 		with self._session() as session:
-			session.query(self.model).filter(self._model.id == id).update(schema.dict(exclude_none=True))
+			session.query(self.model).filter(self._model.id==id).update(schema.dict(exclude_none=True))
 			session.commit()
 
 		return self._get_by_id(id)
@@ -46,15 +62,15 @@ class BaseRepository:
 
 	def _update_put(self, id:int, schema):
 		with self._session() as session:
-			session.query(self.model).filter(self._model.id == id).update(schema.dict())
+			session.query(self.model).filter(self._model.id==id).update(schema.dict())
 			session.commit()
 
 		return self._get_by_id(id)
 
 
-	def _delete(self, id):
+	def _delete(self, id:int):
 		with self._session() as session:
-			obj = session.query(self._model).filter(self._model.id == id)
+			obj = session.query(self._model).filter(self._model.id==id)
 
 			if not obj:
 				raise NotFoundError(detail=f'{self._model.__name__}: Not found with id = {id}')

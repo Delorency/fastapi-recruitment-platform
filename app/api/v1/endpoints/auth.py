@@ -3,7 +3,7 @@ from dependency_injector.wiring import Provide, inject
 
 from app.core.container import Container
 
-from app.schema.auth_schema import SingUpRequest, SingInRequest, SignInResponse
+from app.schema.auth_schema import SingUpRequest, AccessRequest, AccessResponse
 from app.schema.user_schema import User
 
 
@@ -17,7 +17,7 @@ async def test(schema:SingUpRequest, service=Depends(Provide(Container.auth_serv
     return service.singup(schema)
 
 
-@router.post('/access', response_model=SignInResponse)
+@router.post('/access', response_model=AccessResponse)
 @inject
-async def test(schema: SingInRequest, service=Depends(Provide(Container.auth_service))):
+async def test(schema: AccessRequest, service=Depends(Provide(Container.auth_service))):
     return service.access(schema)

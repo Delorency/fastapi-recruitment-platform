@@ -4,7 +4,12 @@ from fastapi import HTTPException, status
 
 
 
-class DuplicatedError(HTTPException):
+class ServerSideError(HTTPException):
+    def __init__(self, detail: Any = None, headers: Optional[Dict[str, Any]] = None) -> None:
+        super().__init__(status.HTTP_500_INTERNAL_SERVER_ERROR, detail, headers)
+
+
+class BadRequestError(HTTPException):
     def __init__(self, detail: Any = None, headers: Optional[Dict[str, Any]] = None) -> None:
         super().__init__(status.HTTP_400_BAD_REQUEST, detail, headers)
 
