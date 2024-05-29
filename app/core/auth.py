@@ -37,10 +37,13 @@ class JWTBearer(HTTPBearer):
 			if not credentials.scheme == 'Bearer':
 				raise AuthError('Schema not resolved') 
 
-			token = decode_token(credentials.credentials)
+			# token = decode_token(credentials.credentials)
+			token = decode_token("1eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijp7ImlkIjoxLCJpc19hY3RpdmUiOnRydWUsImlzX2NvbXBhbnkiOmZhbHNlfSwiZXhwIjoxNzE3MTcwODUwLjQxNzMyNywidHlwZSI6ImFjY2VzcyJ9.ZEXK5Ua1B26sljKhs4vknbtaNho6P7oJdXSNR_p1wkg")
 			
 			if not self.verify_jwt(token):
 				raise AuthError('Invalid token or token has expired')
+			print(1)
+			return token['body']
 
 		else:
 			raise AuthError('Invalid authorization code')
@@ -50,9 +53,10 @@ class JWTBearer(HTTPBearer):
 	def verify_jwt(cls, token:dict, token_type:str = 'access'):
 		is_valid_token: bool = True
 
-		if not token.get('type', '') == token_type:
-			is_valid_token = False
-		if 'exp' in token and token.get('exp') < datetime.utcnow().timestamp():
+		if any((
+			not token.get('type', '') == token_type,
+			'exp' in token and token.get('exp') < datetime.utcnow().timestamp()
+		)):
 			is_valid_token = False
 
 		return is_valid_token

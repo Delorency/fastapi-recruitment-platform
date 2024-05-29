@@ -1,11 +1,12 @@
-from app.core.auth import decode_token
+from fastapi import Depends
+
+from app.core.auth import JWTBearer
 
 from app.model.user_model import User
 
 
 
 class BaseService:
-
 	def __init__(self, repository):
 		self._repo = repository
 
@@ -17,3 +18,6 @@ class BaseService:
 
 	def patch(self, id, schema):
 		return self._repo._update_patch(id, schema)
+
+	def get_current_user(obj:dict = Depends(JWTBearer())):
+		return 1

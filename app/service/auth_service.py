@@ -3,17 +3,22 @@ from pydantic import BaseModel
 from app.core.config import configs
 from app.core.auth import create_jwt_token, JWTBearer, decode_token
 from app.core.exceptions import BadRequestError, ServerSideError
+from app.core.hash import generate_password_hash
 
 from app.repository.auth_repository import AuthRepository
 
-from app.model.user_model import User
+from app.schema.token_schema import Payload
 
-from app.schema.user_schema import User
-from app.schema.token_schema import TokenBody, Payload, TokenRefreshHandler
+from app.model.user_model import User
 
 from .base_service import BaseService
 
-
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijp7ImlkIjoxLCJpc19hY3RpdmUiOnRydWUsImlzX2NvbXBhbnkiOmZhbHNlfSwiZXhwIjoxNzE3MTcwODUwLjQxNzMyNywidHlwZSI6ImFjY2VzcyJ9.ZEXK5Ua1B26sljKhs4vknbtaNho6P7oJdXSNR_p1wkg",
+  "exp": 1717170850.417327,
+  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijp7ImlkIjoxLCJpc19hY3RpdmUiOnRydWUsImlzX2NvbXBhbnkiOmZhbHNlfSwiZXhwIjoxNzE5NTkwMDUwLjQxNzQ1OSwidHlwZSI6InJlZnJlc2gifQ.OrGCj5flDbvDJq8Iy4fDjOyzXslY4kYxe4caciX8f00",
+  "is_company": False
+}
 
 class AuthService(BaseService):
 
@@ -23,63 +28,54 @@ class AuthService(BaseService):
 	def get_by_credentials(self, schema):
 		return self._repo._get_by_credentials(schema)
 
-	def get_by_id_password(self, schema):
-		return self._repo._get_by_id_password(schema)
 
 	def singup(self, schema: BaseModel):
-		user = self.create(schema)
-		delattr(user, 'password')
-		return user
+		schema.password = generate_password_hash(schema.password)
+		obj = self.create(schema)
+		delattr(obj, 'password')
+		return obj
 
 
 	def access(self, schema: BaseModel):
-		user: User = self.get_by_credentials(schema)
+		obj:User = self.get_by_credentials(schema)
 		try:
-			body = Payload(**user.dict()).dict()
+			body = Payload(**obj.dict()).dict()
 			access_token, exp, refresh_token = (
 				*create_jwt_token(body, configs.ACCESS_TOKEN_EXPIRE_SECONDS, 'access'),
 				create_jwt_token(body, configs.REFRESH_TOKEN_EXPIRE_SECONDS, 'refresh')[0]
 			)
-
-			user_info = User(**user.dict()).dict()
 		except:
 			raise ServerSideError('Token generation error')
 
-		return {
+		return {		
 				'access_token':access_token, 
 				'refresh_token':refresh_token, 
 				'exp':exp, 
-				'user_info':user_info
+				'is_company':obj.is_company
 			}
 
 
 	def refresh(self, schema: BaseModel):
-		token_decode = decode_token( schema.dict().get('refresh_token'))
+		token_decode = decode_token(schema.refresh_token)
 		
 		if not JWTBearer.verify_jwt(token_decode, 'refresh'):
 			raise BadRequestError('Invalid token type or token has expired')
 
-		try:
-			token_handler = TokenRefreshHandler(**token_decode.get('body'),
-				password=schema.dict().get('password'))
-		except:
-			raise BadRequestError('Invalid token body')
+		obj = self.get_current_user()
 
-		user: User = self.get_by_id_password(token_handler)
-		
-		try:
+		if not token_decode['body'].get('id') == obj.id:
+			raise BadRequestError('Incorrect refresh token')
 
-			body = Payload(**user.dict()).dict()
+		try:
+			body = Payload(**obj.dict()).dict()
 
 			access_token, exp = create_jwt_token(body, 
 				configs.ACCESS_TOKEN_EXPIRE_SECONDS, 'access')
-
-			user_info = User(**user.dict()).dict()
 		except:
 			raise BadRequestError('Invalid token body')
 
 		return {
 				'access_token':access_token, 
 				'exp':exp, 
-				'user_info':user_info
+				'refresh_token':schema.refresh_token
 			}

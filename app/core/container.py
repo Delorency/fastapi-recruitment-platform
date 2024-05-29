@@ -12,8 +12,7 @@ from app.service import *
 class Container(containers.DeclarativeContainer):
 	wiring_config = containers.WiringConfiguration(
 		modules=[
-			'app.api.v1.endpoints.auth',
-			'app.core.utils'
+			'app.api.v1.endpoints.auth'
 		]
 	)
 
@@ -22,8 +21,9 @@ class Container(containers.DeclarativeContainer):
 	redis = providers.Singleton(Redis, **configs.redis_configs)
 
 	# Repositories
-	user_repository = providers.Factory(UserRepository, session=database.provided.session)
-	auth_repository = providers.Factory(AuthRepository, session=database.provided.session)
+	utils_repository = providers.Factory(UtilsRepository, session=database.provided.session)
+	user_repository = providers.Factory(UserRepository, utils=utils_repository, session=database.provided.session)
+	auth_repository = providers.Factory(AuthRepository, utils=utils_repository, session=database.provided.session)
 
 	# Services
 	user_service = providers.Factory(UserService, repository=user_repository)

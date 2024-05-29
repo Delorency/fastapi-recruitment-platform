@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from pydantic import BaseModel
 
 from .user_schema import User
@@ -11,27 +10,34 @@ class SingUpRequest(BaseModel):
 	email:str
 	name:str
 	password:str
+	is_company:bool = False
+
+class SingUpResponse(BaseModel):
+	id:int
+	username:str
+	email:str
+	name:str
+	is_active:bool
+	is_company:bool = False
 
 
 class AccessRequest(BaseModel):
 	email:str|None
 	username:str|None
 	password:str
-
+	is_company:bool = False
 
 class AccessResponse(BaseModel):
 	access_token: str
-	refresh_token: str
 	exp: float
-	user_info: User
+	refresh_token: str
+	is_company:bool = False
 
 
 class RefreshRequest(BaseModel):
 	refresh_token: str
-	password:str
-
 
 class RefreshResponse(BaseModel):
 	access_token: str
 	exp: float
-	user_info: User
+	refresh_token: str

@@ -18,7 +18,7 @@ class AppIniContainer:
 		self.app = FastAPI(
 			title=configs.PROJECT_NAME,
 			openapi_url=f'{configs.API}/openapi.json',
-			version="0.0.1",
+			version='0.0.1'
 		)
 
 		# Middleware

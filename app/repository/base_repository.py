@@ -4,14 +4,15 @@ from contextlib import AbstractContextManager
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-from app.core.exceptions import NotFoundError, BadRequestError
+from app.core.exceptions import NotFoundError, BadRequestError, DuplicatedError
 
 
 
 class BaseRepository:
-	def __init__(self, model, session: Callable[...,AbstractContextManager[Session]]) -> None:
+	def __init__(self, model, session: Callable[...,AbstractContextManager[Session]], utils = None) -> None:
 		self._model = model
 		self._session = session
+		self._utils = utils
 
 
 	def _get_by_id(self, id:int):
@@ -26,8 +27,9 @@ class BaseRepository:
 
 	def _create(self, schema):
 		with self._session() as session:
-			query = self._model(**schema.dict())
 			try:
+				query = self._model(**schema.dict())
+
 				session.add(query)
 				session.commit()
 				session.refresh(query)

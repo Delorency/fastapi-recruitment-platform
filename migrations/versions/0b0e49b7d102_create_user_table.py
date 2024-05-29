@@ -1,19 +1,18 @@
-"""initial
+"""Create user table
 
-Revision ID: be45f2790838
+Revision ID: 0b0e49b7d102
 Revises: 
-Create Date: 2023-12-30 13:45:06.332495
+Create Date: 2024-05-29 21:37:24.058344
 
 """
 from typing import Sequence, Union
 
 from alembic import op
-import sqlalchemy_utils
 import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'be45f2790838'
+revision: str = '0b0e49b7d102'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -24,13 +23,13 @@ def upgrade() -> None:
     op.create_table('user',
     sa.Column('created_at', sa.DateTime(timezone=True), nullable=True),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=True),
-    sa.Column('username', sa.String(length=100), nullable=False),
+    sa.Column('username', sa.String(length=100), nullable=True),
     sa.Column('email', sa.String(length=100), nullable=True),
     sa.Column('name', sa.String(length=100), nullable=True),
-    sa.Column('password', sqlalchemy_utils.types.encrypted.encrypted_type.EncryptedType(), nullable=True),
+    sa.Column('password', sa.Text(), nullable=True),
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('is_superuser', sa.Boolean(), nullable=False),
     sa.Column('is_active', sa.Boolean(), nullable=False),
+    sa.Column('is_superuser', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
