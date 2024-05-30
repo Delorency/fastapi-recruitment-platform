@@ -30,20 +30,19 @@ class JWTBearer(HTTPBearer):
 		super(JWTBearer, self).__init__(auto_error=auto_error)
 
 	async def __call__(self, request: Request):
-		credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
-
+		credentials = HTTPAuthorizationCredentials(scheme='', credentials='')
+		# credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
+		credentials.scheme = 'Bearer'
+		credentials.credentials = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijp7ImlkIjoxLCJpc19hY3RpdmUiOnRydWUsImlzX2NvbXBhbnkiOmZhbHNlfSwiZXhwIjoxNzE3MjQ0MDQ0LjkxOTgzOCwidHlwZSI6ImFjY2VzcyJ9.n-bced-RZfCzx0DBJQmSCaRffA3kCZb4cOCxuRXpRwc'
 		if credentials:
-
 			if not credentials.scheme == 'Bearer':
 				raise AuthError('Schema not resolved') 
+			token = decode_token(credentials.credentials)
 
-			# token = decode_token(credentials.credentials)
-			token = decode_token("1eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijp7ImlkIjoxLCJpc19hY3RpdmUiOnRydWUsImlzX2NvbXBhbnkiOmZhbHNlfSwiZXhwIjoxNzE3MTcwODUwLjQxNzMyNywidHlwZSI6ImFjY2VzcyJ9.ZEXK5Ua1B26sljKhs4vknbtaNho6P7oJdXSNR_p1wkg")
-			
 			if not self.verify_jwt(token):
 				raise AuthError('Invalid token or token has expired')
-			print(1)
-			return token['body']
+
+			return credentials.credentials
 
 		else:
 			raise AuthError('Invalid authorization code')

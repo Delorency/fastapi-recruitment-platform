@@ -14,8 +14,8 @@ from app.repository.base_repository import BaseRepository
 
 
 class AuthRepository(BaseRepository):
-    def __init__(self, session: Callable[..., AbstractContextManager[Session]], utils=None):
-        super().__init__(User, session, utils)
+    def __init__(self, session: Callable[..., AbstractContextManager[Session]]):
+        super().__init__(User, session)
 
 
     def _get_by_credentials(self, schema):

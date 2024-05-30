@@ -13,12 +13,7 @@ from app.model.user_model import User
 
 from .base_service import BaseService
 
-{
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijp7ImlkIjoxLCJpc19hY3RpdmUiOnRydWUsImlzX2NvbXBhbnkiOmZhbHNlfSwiZXhwIjoxNzE3MTcwODUwLjQxNzMyNywidHlwZSI6ImFjY2VzcyJ9.ZEXK5Ua1B26sljKhs4vknbtaNho6P7oJdXSNR_p1wkg",
-  "exp": 1717170850.417327,
-  "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijp7ImlkIjoxLCJpc19hY3RpdmUiOnRydWUsImlzX2NvbXBhbnkiOmZhbHNlfSwiZXhwIjoxNzE5NTkwMDUwLjQxNzQ1OSwidHlwZSI6InJlZnJlc2gifQ.OrGCj5flDbvDJq8Iy4fDjOyzXslY4kYxe4caciX8f00",
-  "is_company": False
-}
+
 
 class AuthService(BaseService):
 
@@ -55,19 +50,17 @@ class AuthService(BaseService):
 			}
 
 
-	def refresh(self, schema: BaseModel):
+	def refresh(self, schema: BaseModel, user):
 		token_decode = decode_token(schema.refresh_token)
 		
 		if not JWTBearer.verify_jwt(token_decode, 'refresh'):
 			raise BadRequestError('Invalid token type or token has expired')
 
-		obj = self.get_current_user()
-
-		if not token_decode['body'].get('id') == obj.id:
+		if not token_decode['body'].get('id') == user.id:
 			raise BadRequestError('Incorrect refresh token')
 
 		try:
-			body = Payload(**obj.dict()).dict()
+			body = Payload(**user.dict()).dict()
 
 			access_token, exp = create_jwt_token(body, 
 				configs.ACCESS_TOKEN_EXPIRE_SECONDS, 'access')

@@ -1,4 +1,4 @@
-from fastapi import Depends
+from fastapi import Depends, Request
 
 from app.core.auth import JWTBearer
 
@@ -18,6 +18,3 @@ class BaseService:
 
 	def patch(self, id, schema):
 		return self._repo._update_patch(id, schema)
-
-	def get_current_user(obj:dict = Depends(JWTBearer())):
-		return 1

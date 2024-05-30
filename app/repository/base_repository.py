@@ -9,10 +9,9 @@ from app.core.exceptions import NotFoundError, BadRequestError, DuplicatedError
 
 
 class BaseRepository:
-	def __init__(self, model, session: Callable[...,AbstractContextManager[Session]], utils = None) -> None:
+	def __init__(self, model, session: Callable[...,AbstractContextManager[Session]]) -> None:
 		self._model = model
 		self._session = session
-		self._utils = utils
 
 
 	def _get_by_id(self, id:int):
