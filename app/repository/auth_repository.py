@@ -21,11 +21,9 @@ class AuthRepository(BaseRepository):
     def _get_by_credentials(self, schema):
         with self._session() as session: 
             if schema.email:
-                obj = session.query(self._model).filter(self._model.email==schema.email,
-                    self._model.is_company==schema.is_company).first()
+                obj = session.query(self._model).filter(self._model.email==schema.email).first()
             elif schema.username:
-                obj = session.query(self._model).filter(self._model.username==schema.username,
-                    self._model.is_company==schema.is_company).first()
+                obj = session.query(self._model).filter(self._model.username==schema.username).first()
             else:
                 raise BadRequestError('Email field and username field is empty')
 

@@ -25,13 +25,12 @@ class AccessRequest(BaseModel):
 	email:str|None
 	username:str|None
 	password:str
-	is_company:bool = False
+
 
 class AccessResponse(BaseModel):
 	access_token: str
 	exp: float
 	refresh_token: str
-	is_company:bool = False
 
 
 class RefreshRequest(BaseModel):

@@ -45,8 +45,7 @@ class AuthService(BaseService):
 		return {		
 				'access_token':access_token, 
 				'refresh_token':refresh_token, 
-				'exp':exp, 
-				'is_company':obj.is_company
+				'exp':exp
 			}
 
 

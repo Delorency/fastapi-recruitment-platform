@@ -9,7 +9,6 @@ from app.schema.auth_schema import SingUpRequest, SingUpResponse, \
 
 
 
-
 router = APIRouter(prefix="/auth")
 
 
