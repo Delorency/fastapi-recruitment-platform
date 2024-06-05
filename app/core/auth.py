@@ -30,10 +30,7 @@ class JWTBearer(HTTPBearer):
 		super(JWTBearer, self).__init__(auto_error=auto_error)
 
 	async def __call__(self, request: Request):
-		credentials = HTTPAuthorizationCredentials(scheme='', credentials='')
-		# credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
-		credentials.scheme = 'Bearer'
-		credentials.credentials = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJib2R5Ijp7ImlkIjoxLCJpc19hY3RpdmUiOnRydWUsImlzX2NvbXBhbnkiOmZhbHNlfSwiZXhwIjoxNzE3MjQ0MDQ0LjkxOTgzOCwidHlwZSI6ImFjY2VzcyJ9.n-bced-RZfCzx0DBJQmSCaRffA3kCZb4cOCxuRXpRwc'
+		credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
 		if credentials:
 			if not credentials.scheme == 'Bearer':
 				raise AuthError('Schema not resolved') 
