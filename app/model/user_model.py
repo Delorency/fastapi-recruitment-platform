@@ -10,6 +10,8 @@ class User(Base, table=True):
 	name:str = Field(max_length=100)
 	password:str = Field()
 
+	photo:str = Field()
+
 	is_active:bool = True
 	is_superuser:bool = False
 	is_company:bool = False

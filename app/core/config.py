@@ -18,6 +18,7 @@ class Configs(BaseSettings):
 		"postgresql": "postgresql",
 		"mysql": "mysql+pymysql",
 	}
+	ROOT_PATH:str = os.getenv('ROOT_PATH')
 
 	# date
 	DATETIME_FORMAT:str = "%Y-%m-%dT%H:%M:%S"

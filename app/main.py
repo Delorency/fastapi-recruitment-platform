@@ -3,6 +3,7 @@ from starlette.middleware.cors import CORSMiddleware
 
 from sqladmin import Admin
 
+from app.lifespan import lifespan
 from app.core.container import Container
 from app.core.config import configs
 
@@ -18,7 +19,8 @@ class AppIniContainer:
 		self.app = FastAPI(
 			title=configs.PROJECT_NAME,
 			openapi_url=f'{configs.API}/openapi.json',
-			version='0.0.1'
+			version='0.0.1',
+			lifespan=lifespan
 		)
 
 		# Middleware
