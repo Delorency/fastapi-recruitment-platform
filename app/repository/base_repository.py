@@ -1,3 +1,4 @@
+from pydantic import BaseModel
 from typing import Callable
 from contextlib import AbstractContextManager
 
@@ -24,11 +25,10 @@ class BaseRepository:
 			return obj
 
 
-	def _create(self, schema):
+	def _create(self, schema:BaseModel):
 		with self._session() as session:
+			query = self._model(**schema.dict())
 			try:
-				query = self._model(**schema.dict())
-
 				session.add(query)
 				session.commit()
 				session.refresh(query)
@@ -37,7 +37,7 @@ class BaseRepository:
 			return query
 	
 
-	def _update_patch(self, id:int, schema):
+	def _update_patch(self, id:int, schema:BaseModel):
 		with self._session() as session:
 			session.query(self.model).filter(self._model.id==id).update(schema.dict(exclude_none=True))
 			session.commit()
@@ -45,7 +45,7 @@ class BaseRepository:
 		return self._get_by_id(id)
 
 
-	def _update_put(self, id:int, schema):
+	def _update_put(self, id:int, schema:BaseModel):
 		with self._session() as session:
 			session.query(self.model).filter(self._model.id==id).update(schema.dict())
 			session.commit()

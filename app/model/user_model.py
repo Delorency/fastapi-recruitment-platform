@@ -1,4 +1,4 @@
-from sqlmodel import SQLModel, Column, String, Text, Field
+from sqlmodel import Field
 
 from .base_model import Base
 
@@ -10,7 +10,7 @@ class User(Base, table=True):
 	name:str = Field(max_length=100)
 	password:str = Field()
 
-	photo:str = Field()
+	photo:str|None = Field()
 
 	is_active:bool = True
 	is_superuser:bool = False

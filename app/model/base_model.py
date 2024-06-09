@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from sqlmodel import SQLModel, Column, String, Text, Field, DateTime
+from sqlmodel import SQLModel, Column, Field, DateTime
 
 from app.core.config import configs
 

@@ -20,18 +20,18 @@ class AuthService(BaseService):
 	def __init__(self, repository: AuthRepository):
 		super().__init__(repository)
 
-	def get_by_credentials(self, schema):
+	def get_by_credentials(self, schema:BaseModel):
 		return self._repo._get_by_credentials(schema)
 
 
-	def singup(self, schema: BaseModel):
+	def singup(self, schema:BaseModel):
 		schema.password = generate_password_hash(schema.password)
 		obj = self.create(schema)
 		delattr(obj, 'password')
 		return obj
 
 
-	def access(self, schema: BaseModel):
+	def access(self, schema:BaseModel):
 		obj:User = self.get_by_credentials(schema)
 		try:
 			body = Payload(**obj.dict()).dict()
@@ -49,7 +49,7 @@ class AuthService(BaseService):
 			}
 
 
-	def refresh(self, schema: BaseModel, user):
+	def refresh(self, schema:BaseModel, user):
 		token_decode = decode_token(schema.refresh_token)
 		
 		if not JWTBearer.verify_jwt(token_decode, 'refresh'):

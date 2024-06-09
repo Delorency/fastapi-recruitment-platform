@@ -2,7 +2,6 @@ from contextlib import AbstractContextManager
 from typing import Callable
 
 from sqlalchemy.orm import Session
-from sqlalchemy.exc import IntegrityError
 
 from app.core.exceptions import NotFoundError, BadRequestError, DuplicatedError
 from app.core.hash import check_password_hash
@@ -37,16 +36,3 @@ class AuthRepository(BaseRepository):
                 raise NotFoundError(f'{self._model.__name__}: Invalid password')
 
             return obj
-
-
-    def _create(self, schema):
-        with self._session() as session:
-            query = self._model(**schema.dict())
-
-            try:
-                session.add(query)
-                session.commit()
-                session.refresh(query)
-            except IntegrityError as e:
-                raise DuplicatedError(detail=str(e.orig))
-            return query

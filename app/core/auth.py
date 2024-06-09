@@ -26,8 +26,9 @@ def decode_token(token: str) -> str:
 
 
 class JWTBearer(HTTPBearer):
-	def __init__(self, auto_error: bool = True):
+	def __init__(self, is_company:bool|None=None, auto_error:bool=True):
 		super(JWTBearer, self).__init__(auto_error=auto_error)
+		self.is_company=is_company
 
 	async def __call__(self, request: Request):
 		credentials: HTTPAuthorizationCredentials = await super(JWTBearer, self).__call__(request)
@@ -39,14 +40,17 @@ class JWTBearer(HTTPBearer):
 			if not self.verify_jwt(token):
 				raise AuthError('Invalid token or token has expired')
 
-			return credentials.credentials
+			if self.is_company and not token['body'].get('is_company') is self.is_company:
+				raise AuthError('Invalid token or token has expired') 
+
+			return token
 
 		else:
 			raise AuthError('Invalid authorization code')
 
 
 	@classmethod
-	def verify_jwt(cls, token:dict, token_type:str = 'access'):
+	def verify_jwt(cls, token:dict, token_type:str='access'):
 		is_valid_token: bool = True
 
 		if any((

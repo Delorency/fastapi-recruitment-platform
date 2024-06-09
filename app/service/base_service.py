@@ -10,7 +10,7 @@ class BaseService:
 	def __init__(self, repository):
 		self._repo = repository
 
-	def get_obj(self, id):
+	def get_obj(self, id:int):
 		return self._repo._get_by_id(id)
 
 	def create(self, schema):

@@ -13,7 +13,7 @@ class Container(containers.DeclarativeContainer):
 	wiring_config = containers.WiringConfiguration(
 		modules=[
 			'app.api.v1.endpoints.auth',
-			'app.api.v1.endpoints.company',
+			'app.api.v1.endpoints.company.profile',
 			'app.core.secure'
 		]
 	)
@@ -25,7 +25,9 @@ class Container(containers.DeclarativeContainer):
 	# Repositories
 	user_repository = providers.Factory(UserRepository, session=database.provided.session)
 	auth_repository = providers.Factory(AuthRepository, session=database.provided.session)
+	company_profile_repository = providers.Factory(ProfileRepository, session=database.provided.session)
 
 	# Services
 	user_service = providers.Factory(UserService, repository=user_repository)
 	auth_service = providers.Factory(AuthService, repository=auth_repository)
+	company_profile_service = providers.Factory(ProfileService, repository=company_profile_repository)
