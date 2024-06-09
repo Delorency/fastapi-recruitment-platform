@@ -7,5 +7,6 @@ class User(BaseModel):
 	username:str
 	email:str
 	name:str
+	is_company:bool
 	is_active:bool
 	is_superuser:bool
