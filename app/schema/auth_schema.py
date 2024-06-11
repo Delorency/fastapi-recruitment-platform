@@ -1,7 +1,7 @@
 import re
 
 from datetime import datetime
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, validator, EmailStr
 
 from app.core.exceptions import BadRequestError
 from .user_schema import User
@@ -10,7 +10,7 @@ from .user_schema import User
 
 class SingUpRequest(BaseModel):
 	username:str|None
-	email:str|None
+	email:EmailStr
 	name:str
 	password:str
 	is_company:bool = False
@@ -22,12 +22,12 @@ class SingUpRequest(BaseModel):
 			raise BadRequestError("The username must be at least 3 characters long")
 		return value
 
-	@validator('email')
-	@classmethod
-	def validate_email(cls, value):
-		if not bool(re.fullmatch(r'[\w.-]+@[\w-]+\.[\w.]+', value)):
-			raise BadRequestError("Email is invalid")
-		return value 
+	# @validator('email')
+	# @classmethod
+	# def validate_email(cls, value):
+	# 	if not bool(re.fullmatch(r'[\w.-]+@[\w-]+\.[\w.]+', value)):
+	# 		raise BadRequestError("Email is invalid")
+	# 	return value 
 
 	@validator('password')
 	@classmethod

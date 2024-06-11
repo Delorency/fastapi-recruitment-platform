@@ -41,7 +41,7 @@ class JWTBearer(HTTPBearer):
 				raise AuthError('Invalid token or token has expired')
 
 			if self.is_company and not token['body'].get('is_company') is self.is_company:
-				raise AuthError('Invalid token or token has expired') 
+				raise AuthError('Not company token') 
 
 			return token
 

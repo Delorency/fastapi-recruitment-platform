@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Callable
+from typing import Callable, Union
 from contextlib import AbstractContextManager
 
 from sqlalchemy.orm import Session
@@ -23,6 +23,17 @@ class BaseRepository:
 				raise NotFoundError(f'{self._model.__name__}: Not found with id = {id}')
 
 			return obj
+
+
+	def _get_by_fields(self, fields:dict[Union[str,int], Union[str,int]]):
+		with self._session() as session:
+			obj = session.query(self._model)
+			for k,v in fields.items():
+				if self._model.__fields__.get(k) is None:
+					continue
+				obj.filter(self._model.__fields__.get(k)==v)
+			
+			return obj.first()
 
 
 	def _create(self, schema:BaseModel):
