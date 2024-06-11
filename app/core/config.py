@@ -19,6 +19,7 @@ class Configs(BaseSettings):
 		"mysql": "mysql+pymysql",
 	}
 	ROOT_PATH:str = os.getenv('ROOT_PATH')
+	ROOT_STATIC_PATH = os.getenv('ROOT_STATIC_PATH')
 
 	# date
 	DATETIME_FORMAT:str = "%Y-%m-%dT%H:%M:%S"

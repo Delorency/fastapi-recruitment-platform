@@ -5,9 +5,7 @@ from sqlalchemy.orm import Session
 
 from app.core.exceptions import NotFoundError, BadRequestError, DuplicatedError
 from app.core.hash import check_password_hash
-
 from app.model.user_model import User
-
 from app.repository.base_repository import BaseRepository
 
 

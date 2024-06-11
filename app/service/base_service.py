@@ -3,7 +3,6 @@ from typing import Union
 from fastapi import Depends, Request
 
 from app.core.auth import JWTBearer
-
 from app.model.user_model import User
 
 
@@ -23,3 +22,6 @@ class BaseService:
 
 	def patch(self, id, schema):
 		return self._repo._update_patch(id, schema)
+
+	def put(self, id, schema):
+		return self._repo._update_put(id, schema)

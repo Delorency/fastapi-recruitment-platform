@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 
 from sqladmin import Admin
@@ -44,6 +45,9 @@ class AppIniContainer:
 
 		# Mount subapps
 		self.app.mount(configs.API_V1_PREFIX, api_v1)
+
+		# Mount static directories
+		self.app.mount("/static", StaticFiles(directory=f'{configs.ROOT_STATIC_PATH}'), name="static") 
 
 		# Admin
 		self.admin = Admin(self.app, self.database._engine)

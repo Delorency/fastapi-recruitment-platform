@@ -27,13 +27,13 @@ class BaseRepository:
 
 	def _get_by_fields(self, fields:dict[Union[str,int], Union[str,int]]):
 		with self._session() as session:
-			obj = session.query(self._model)
+			objs = session.query(self._model)
 			for k,v in fields.items():
 				if self._model.__fields__.get(k) is None:
 					continue
-				obj.filter(self._model.__fields__.get(k)==v)
+				objs.filter(self._model.__fields__.get(k)==v)
 			
-			return obj.first()
+			return objs
 
 
 	def _create(self, schema:BaseModel):
@@ -50,7 +50,7 @@ class BaseRepository:
 
 	def _update_patch(self, id:int, schema:BaseModel):
 		with self._session() as session:
-			session.query(self.model).filter(self._model.id==id).update(schema.dict(exclude_none=True))
+			session.query(self._model).filter(self._model.id==id).update(schema.dict(exclude_none=True))
 			session.commit()
 
 		return self._get_by_id(id)
@@ -58,7 +58,7 @@ class BaseRepository:
 
 	def _update_put(self, id:int, schema:BaseModel):
 		with self._session() as session:
-			session.query(self.model).filter(self._model.id==id).update(schema.dict())
+			session.query(self._model).filter(self._model.id==id).update(schema.dict())
 			session.commit()
 
 		return self._get_by_id(id)

@@ -6,11 +6,8 @@ from app.core.exceptions import BadRequestError, ServerSideError
 from app.core.hash import generate_password_hash
 
 from app.repository.auth_repository import AuthRepository
-
 from app.schema.token_schema import Payload
-
 from app.model.user_model import User
-
 from .base_service import BaseService
 
 
