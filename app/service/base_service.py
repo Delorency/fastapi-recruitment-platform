@@ -20,8 +20,8 @@ class BaseService:
 	def create(self, schema):
 		return self._repo._create(schema)
 
-	def patch(self, id, schema):
-		return self._repo._update_patch(id, schema)
+	def full_update(self, id, schema):
+		return self._repo._full_update(id, schema)
 
-	def put(self, id, schema):
-		return self._repo._update_put(id, schema)
+	def partial_update(self, id, schema):
+		return self._repo._partial_update(id, schema)

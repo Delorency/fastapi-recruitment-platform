@@ -24,7 +24,6 @@ class BaseRepository:
 
 			return obj
 
-
 	def _get_by_fields(self, fields:dict[Union[str,int], Union[str,int]]):
 		with self._session() as session:
 			objs = session.query(self._model)
@@ -34,7 +33,6 @@ class BaseRepository:
 				objs.filter(self._model.__fields__.get(k)==v)
 			
 			return objs
-
 
 	def _create(self, schema:BaseModel):
 		with self._session() as session:
@@ -46,27 +44,24 @@ class BaseRepository:
 			except IntegrityError as e:
 				raise DuplicatedError(detail=str(e.orig))
 			return query
-	
 
-	def _update_patch(self, id:int, schema:BaseModel):
-		with self._session() as session:
-			session.query(self._model).filter(self._model.id==id).update(schema.dict(exclude_none=True))
-			session.commit()
-
-		return self._get_by_id(id)
-
-
-	def _update_put(self, id:int, schema:BaseModel):
+	def _full_update(self, id:int, schema:BaseModel):
 		with self._session() as session:
 			session.query(self._model).filter(self._model.id==id).update(schema.dict())
 			session.commit()
 
 		return self._get_by_id(id)
 
+	def _partial_update(self, id:int, schema:BaseModel):
+		with self._session() as session:
+			session.query(self._model).filter(self._model.id==id).update(schema.dict(exclude_none=True))
+			session.commit()
+
+		return self._get_by_id(id)
 
 	def _delete(self, id:int):
 		with self._session() as session:
-			obj = session.query(self._model).filter(self._model.id==id)
+			obj = session.query(self._model).filter(self._model.id==id).first()
 
 			if not obj:
 				raise NotFoundError(f'{self._model.__name__}: Not found with id = {id}')
