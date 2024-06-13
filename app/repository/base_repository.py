@@ -25,11 +25,14 @@ class BaseRepository:
 
 			return obj
 
-	def _get_by_fields(self,
-		page_size:int,
-		page:int,
-		fields:dict[Union[str,int], Union[str,int]]=dict()
-		):
+	def _get_list(self, schema):
+		with self._session() as session:
+			objs = session.query(self._model)
+
+		return objs.order_by(desc(self._model.updated_at)).limit(
+			schema.page_size).offset((schema.page-1)*schema.page_size)
+
+	def _get_by_fields(self,fields:dict[Union[str,int], Union[str,int]]=dict()):
 		with self._session() as session:
 			objs = session.query(self._model)
 			for k,v in fields.items():
@@ -37,7 +40,7 @@ class BaseRepository:
 					continue
 				objs.filter(self._model.__fields__.get(k)==v)
 
-			return objs.order_by(desc(self._model.updated_at)).limit(page_size).offset((page-1)*page_size)
+			return objs
 
 	def _create(self, schema:BaseModel):
 		with self._session() as session:
