@@ -14,8 +14,12 @@ class BaseService:
 	def get_obj(self, id:int):
 		return self._repo._get_by_id(id)
 
-	def get_by_fields(self, fields:dict[Union[str,int], Union[str,int]]):
-		return self._repo._get_by_fields(fields)
+	def get_by_fields(self,
+		page_size:int,
+		page:int,
+		fields:dict[Union[str,int], Union[str,int]]=dict()
+		):
+		return self._repo._get_by_fields(fields=fields, page_size=page_size, page=page)
 
 	def create(self, schema):
 		return self._repo._create(schema)

@@ -31,6 +31,9 @@ class Configs(BaseSettings):
 	REFRESH_TOKEN_EXPIRE_SECONDS:int = 60 * 60 * 24 * 30
 	ALGORITHM:str = 'HS256'
 
+	# Find options
+	PAGE_SIZE:int = 20
+
 	# CORS
 	BACKEND_CORS_ORIGINS:list[str] = ["*"]
 

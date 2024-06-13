@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from typing import Callable, Union
 from contextlib import AbstractContextManager
 
+from sqlalchemy import desc
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
@@ -24,15 +25,19 @@ class BaseRepository:
 
 			return obj
 
-	def _get_by_fields(self, fields:dict[Union[str,int], Union[str,int]]):
+	def _get_by_fields(self,
+		page_size:int,
+		page:int,
+		fields:dict[Union[str,int], Union[str,int]]=dict()
+		):
 		with self._session() as session:
 			objs = session.query(self._model)
 			for k,v in fields.items():
 				if self._model.__fields__.get(k) is None:
 					continue
 				objs.filter(self._model.__fields__.get(k)==v)
-			
-			return objs
+
+			return objs.order_by(desc(self._model.updated_at)).limit(page_size).offset((page-1)*page_size)
 
 	def _create(self, schema:BaseModel):
 		with self._session() as session:
