@@ -18,10 +18,10 @@ class User(Base, table=True):
 	is_superuser:bool = False
 	is_company:bool = False
 
-	profile: Optional['Profile'] = Relationship(
-		back_populates='user',
-		sa_relationship_kwargs={'uselist': False}
-	)
+	# profile: Optional['Profile'] = Relationship(
+	# 	back_populates='user',
+	# 	sa_relationship_kwargs={'uselist': False}
+	# )
 
 	def __str__(self):
 		return f'id: {self.id}, username: {self.username}, email: {self.email}'

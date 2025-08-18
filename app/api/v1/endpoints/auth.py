@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from dependency_injector.wiring import Provide, inject
 
-from app.core.secure import get_current_active_user
+# from app.core.secure import get_current_active_user
 from app.core.container import Container
 
 from app.schema.auth_schema import SingUpRequest, SingUpResponse, \
@@ -34,7 +34,8 @@ async def access(
 @inject
 async def refresh(
     schema: RefreshRequest,
-    user=Depends(get_current_active_user),
+    # user=Depends(get_current_active_user),
     service=Depends(Provide[Container.auth_service])
     ):
-    return service.refresh(schema, user)
+    # return service.refresh(schema, user)
+    return 

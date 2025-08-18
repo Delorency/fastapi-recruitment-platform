@@ -4,11 +4,12 @@ from starlette.middleware.cors import CORSMiddleware
 
 from sqladmin import Admin
 
-from app.lifespan import lifespan
 from app.core.container import Container
 from app.core.config import configs
 
 from app.api.v1.subapp import subapp as api_v1
+
+from app.core.lifespan import lifespan
 
 
 
@@ -18,17 +19,17 @@ class AppIniContainer:
 
 		# App
 		self.app = FastAPI(
-			title=configs.PROJECT_NAME,
-			openapi_url=f'{configs.API}/openapi.json',
+			title=configs.projectcfg.project_name,
+			openapi_url=f'{configs.projectcfg.api}/openapi.json',
 			version='0.0.1',
 			lifespan=lifespan
 		)
 
 		# Middleware
-		if configs.BACKEND_CORS_ORIGINS:
+		if configs.apicfg.backend_cors_origins:
 			self.app.add_middleware(
 				CORSMiddleware,
-				allow_origins=[str(origin) for origin in configs.BACKEND_CORS_ORIGINS],
+				allow_origins=[str(origin) for origin in configs.apicfg.backend_cors_origins],
 				allow_credentials=True,
 				allow_methods=["*"],
 				allow_headers=["*"],
@@ -44,10 +45,10 @@ class AppIniContainer:
 		self.redis = self.container.redis()
 
 		# Mount subapps
-		self.app.mount(configs.API_V1_PREFIX, api_v1)
+		self.app.mount(configs.projectcfg.api_v1_prefix, api_v1)
 
 		# Mount static directories
-		self.app.mount("/static", StaticFiles(directory=f'{configs.ROOT_STATIC_PATH}'), name="static") 
+		self.app.mount("/static", StaticFiles(directory=f'{configs.projectcfg.project_path}/{configs.projectcfg.static_dir}'), name="static") 
 
 		# Admin
 		self.admin = Admin(self.app, self.database._engine)

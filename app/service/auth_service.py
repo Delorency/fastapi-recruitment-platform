@@ -33,8 +33,8 @@ class AuthService(BaseService):
 		try:
 			body = Payload(**obj.dict()).dict()
 			access_token, exp, refresh_token = (
-				*create_jwt_token(body, configs.ACCESS_TOKEN_EXPIRE_SECONDS, 'access'),
-				create_jwt_token(body, configs.REFRESH_TOKEN_EXPIRE_SECONDS, 'refresh')[0]
+				*create_jwt_token(body, configs.jwtcfg.access_token_expire_second, 'access'),
+				create_jwt_token(body, configs.jwtcfg.refresh_token_expire_second, 'refresh')[0]
 			)
 		except:
 			raise ServerSideError('Token generation error')
@@ -59,7 +59,7 @@ class AuthService(BaseService):
 			body = Payload(**user.dict()).dict()
 
 			access_token, exp = create_jwt_token(body, 
-				configs.ACCESS_TOKEN_EXPIRE_SECONDS, 'access')
+				configs.jwtcfg.access_token_expire_second, 'access')
 		except:
 			raise BadRequestError('Invalid token body')
 

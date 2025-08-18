@@ -1,8 +1,8 @@
-import app.admin.user_admin
-import app.admin.company_admin
+from app.admin.user_admin import UserAdminView
+# import app.admin.company_admin
 
 
 __all__ = (
-	user_admin,
-	company_admin
+	UserAdminView,
+	# company_admin
 )

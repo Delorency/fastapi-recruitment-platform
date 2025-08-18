@@ -1,3 +1,3 @@
 from .user_repository import UserRepository
 from .auth_repository import AuthRepository
-from .company_repositories.profile_repository import ProfileRepository
+# from .company_repositories.profile_repository import ProfileRepository

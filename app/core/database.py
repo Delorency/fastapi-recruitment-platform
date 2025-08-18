@@ -17,15 +17,3 @@ class Database:
 			autoflush=False
 		)
 		self._scoped_session = scoped_session(self._session_factory)
-
-
-	@contextmanager
-	def session(self) -> Callable[..., AbstractContextManager[Session]]:
-		session: Session = self._scoped_session()
-		try:
-			yield session
-		except Exception:
-			session.rollback()
-			raise
-		finally:
-			session.close()
