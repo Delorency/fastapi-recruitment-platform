@@ -21,9 +21,9 @@ class AppIniContainer:
 		self.app = FastAPI(
 			title=configs.projectcfg.project_name,
 			openapi_url=f'{configs.projectcfg.api}/openapi.json',
-			version='0.0.1',
-			lifespan=lifespan
+			version='0.0.1'
 		)
+		lifespan()
 
 		# Middleware
 		if configs.apicfg.backend_cors_origins:

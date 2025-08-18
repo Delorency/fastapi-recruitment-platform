@@ -5,12 +5,10 @@ from fastapi import FastAPI
 from app.core.config import configs 
 
 
-
-def lifespan(app: FastAPI):
+def lifespan():
     createStaticDir()
     createLogDir()
-    yield
-
+    
 
 def createStaticDir():
     path = f'{configs.projectcfg.project_path}/{configs.projectcfg.static_dir}'
